@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import OMDBSearch from './components/OMDBSearch'
+import OMDBCard from './components/OMDBCard';
 const BASE_URL = `http://www.omdbapi.com/?`
 const RESULTS_PER_PAGE = 10
 
@@ -56,9 +57,8 @@ function App() {
     <div>
     <form>
       <OMDBSearch searchTerm={searchTerm} setSearchTerm={handleSearch} labelName={'omdb-search'} labelText={'Search'} />
-      <pre>
-        {JSON.stringify(results, undefined, 2)}
-      </pre>
+      {results?.Search?.map(result => <OMDBCard title={result.Title} releaseYear={result.Year} posterUrl={result.Poster} {...result}/>)}
+        {/* {JSON.stringify(results, undefined, 2)} */}
     </form>
     <button onClick={prevPage}>{'<-'}</button>
     <button onClick={nextPage}>{'->'}</button>
