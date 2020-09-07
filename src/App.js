@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import OMDBSearch from './components/OMDBSearch'
 import OMDBCard from './components/OMDBCard';
+import styles from './App.module.css'
+
 const BASE_URL = `http://www.omdbapi.com/?`
 const RESULTS_PER_PAGE = 10
 
@@ -16,6 +18,8 @@ function App() {
   useEffect(() => {
     if (searchTerm) {
       handleMovieFetchCallback(setResults)
+    } else {
+      setResults([])
     }
   }, [page, searchTerm, handleMovieFetchCallback])
 
@@ -65,10 +69,11 @@ function App() {
 
   return (
     <div>
-      {nominated.length === 5 ? <div>YOU HAVE 5 NOMINATIONS</div> : null}
-    <form>
+      {/* {nominated.length === 5 ? <div>YOU HAVE 5 NOMINATIONS</div> : null} */}
+      <div className={`${styles['search-container']} ${styles['full-width']}`}>
       <OMDBSearch searchTerm={searchTerm} setSearchTerm={handleSearch} labelName={'omdb-search'} labelText={'Search'} />
-      <div style={{height: 'auto', width: 'auto'}}>
+      </div>
+      <div className={`${styles['results-container']} ${styles['full-width']}`}>
       {results?.Search?.map((result, i) => {
         const lowercasedResultTitle = result.Title.toLowerCase()
         if (nominated.some(nominatedElement => nominatedElement.title.toLowerCase() === lowercasedResultTitle) ||
@@ -79,10 +84,11 @@ function App() {
         }
       })}
         </div>
-    </form>
+    <div className={`${styles['pagination-container']} ${styles['full-width']}`}>
     <button onClick={prevPage}>{'<-'}</button>
     <button onClick={nextPage}>{'->'}</button>
-    <div>
+    </div>
+    <div className={`${styles['nominated-container']} ${styles['full-width']}`}>
       {nominated.map((result, i) => <OMDBCard nominate key={result.title + i} title={result.title} releaseYear={result.releaseYear} posterUrl={result.posterUrl} handleAddNominate={handleAddNominate}  {...result}/>)}
     </div>
     </div>

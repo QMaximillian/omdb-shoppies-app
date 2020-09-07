@@ -1,0 +1,40 @@
+img {
+    height: 100%;
+}
+
+.full-width {
+    width: 100%;
+}
+.search-container {
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.results-container { 
+    height: 45vh;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center
+}
+
+.results-container > div {
+    margin: 1rem;
+}
+
+.nominated-container {
+    height: 40vh;
+    display: flex;
+}
+.nominated-container > * {
+    margin: 0 1rem;
+}
+
+.pagination-container {
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

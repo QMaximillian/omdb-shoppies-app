@@ -1,0 +1,23 @@
+.info-container {
+    position: absolute;
+    bottom: 5rem;
+    background-color: black;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.omdb-card-container {
+    height: 100%; 
+    /* width: 100%; */
+    position: relative;
+}
+
+.info-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
