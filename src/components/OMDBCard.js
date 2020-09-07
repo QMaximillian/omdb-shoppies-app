@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default function OMDBCard({ title, releaseYear, posterUrl, ...props}) {
-    console.log(props)
+export default function OMDBCard({ alreadyNominated = false, nominate = false, title, releaseYear, posterUrl, handleAddNominate, ...props}) {
+
     return (
-        <div style={{position: 'relative', height: '50%', width: '50%'}}>
-            <img style={{width: '100%'}}alt={`Poster for the movie: "${title}"`} src={posterUrl}></img>
-            <div style={{position: 'absolute', bottom: '3rem', right: 0, height: '5rem', width: "40%"}}>
-            <div>{title}</div>
+        <div style={{height: '100%', width: 'auto'}}>
+            <img alt={`Poster for the movie: "${title}"`} src={posterUrl}></img>
+            <div >
+            <div style={{textTransform: 'capitalize'}}>{title}</div>
             <div>{releaseYear}</div>
-        
+            <button disabled={alreadyNominated} style={{color: alreadyNominated ? 'grey' : 'black'}} onClick={(event) => handleAddNominate(event, nominate, { title, releaseYear, posterUrl })}>{nominate ? 'Remove Nomination' : 'Nominate'}</button>
         </div>
     </div>)
 }
@@ -17,7 +17,8 @@ export default function OMDBCard({ title, releaseYear, posterUrl, ...props}) {
 OMDBCard.propTypes = {
     title: PropTypes.string.isRequired,
     releaseYear: PropTypes.string.isRequired,
-    imgUrl: PropTypes.string.isRequired,
+    posterUrl: PropTypes.string.isRequired,
+    handleAddNominate: PropTypes.func.isRequired
 
 }
 
