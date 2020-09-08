@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import OMDBSearch from './components/OMDBSearch'
 import OMDBCard from './components/OMDBCard';
+import NominationDrawer from './components/NominationDrawer';
 import styles from './App.module.css'
 
 const BASE_URL = `http://www.omdbapi.com/?`
@@ -11,9 +12,19 @@ function App() {
   const [results, setResults] = useState([])
   const [page, setPage] = useState(1)
   const [nominated, setNominated] = useState([])
+  const [showNominations, setShowNominations] = useState(false)
 
 
   const handleMovieFetchCallback = useCallback(handleMovieFetch, [page, searchTerm])
+
+  useEffect(() => {
+    if (localStorage.getItem('nominations')) {
+      setNominated(JSON.parse(localStorage.getItem('nominations')))
+    }
+  }, [])
+  useEffect(() => {
+    localStorage.setItem('nominations', JSON.stringify(nominated))
+  }, [nominated])
 
   useEffect(() => {
     if (searchTerm) {
@@ -25,6 +36,8 @@ function App() {
 
   function handleAddNominate(event, nominate, props){
     event.preventDefault()
+    event.stopPropagation()
+
     if (nominate) {
       setNominated(currentNominated => currentNominated.filter(element => element.title !== props.title))
     } else {
@@ -68,30 +81,43 @@ function App() {
 
 
   return (
-    <div>
-      {/* {nominated.length === 5 ? <div>YOU HAVE 5 NOMINATIONS</div> : null} */}
-      <div className={`${styles['search-container']} ${styles['full-width']}`}>
-      <OMDBSearch searchTerm={searchTerm} setSearchTerm={handleSearch} labelName={'omdb-search'} labelText={'Search'} />
+    <>
+      {nominated.length === 5 ?
+        <div className={styles['full-nominations-banner']}>YOU HAVE 5 NOMINATIONS</div> 
+       : 
+      null
+      }
+      <div className={styles['shoppies-banner']}>THE SHOPPIES</div>
+      <div className={`${styles['search-container']}`}>
+      <OMDBSearch searchTerm={searchTerm} setSearchTerm={handleSearch} labelName={'omdb-search'} labelText={'Movie Search'} />
       </div>
-      <div className={`${styles['results-container']} ${styles['full-width']}`}>
+      <div className={`${styles['results-container']}`}>
       {results?.Search?.map((result, i) => {
         const lowercasedResultTitle = result.Title.toLowerCase()
         if (nominated.some(nominatedElement => nominatedElement.title.toLowerCase() === lowercasedResultTitle) ||
             nominated.length === 5) {
-          return <OMDBCard key={result.Poster + i} title={lowercasedResultTitle} releaseYear={result.Year} posterUrl={result.Poster} handleAddNominate={handleAddNominate} alreadyNominated={true}/>
+          return <OMDBCard key={result.Poster + i} title={lowercasedResultTitle} releaseYear={result.Year} posterUrl={result.Poster === "N/A" ? '' : result.Poster} handleAddNominate={handleAddNominate} alreadyNominated={true}/>
         } else {
-          return <OMDBCard key={result.Poster + i} title={lowercasedResultTitle} releaseYear={result.Year} posterUrl={result.Poster} handleAddNominate={handleAddNominate} />
+          return <OMDBCard key={result.Poster + i} title={lowercasedResultTitle} releaseYear={result.Year} posterUrl={result.Poster === "N/A" ? '' : result.Poster} handleAddNominate={handleAddNominate} />
         }
       })}
         </div>
-    <div className={`${styles['pagination-container']} ${styles['full-width']}`}>
+    <div className={`${styles['pagination-container']}`}>
     <button onClick={prevPage}>{'<-'}</button>
     <button onClick={nextPage}>{'->'}</button>
     </div>
-    <div className={`${styles['nominated-container']} ${styles['full-width']}`}>
-      {nominated.map((result, i) => <OMDBCard nominate key={result.title + i} title={result.title} releaseYear={result.releaseYear} posterUrl={result.posterUrl} handleAddNominate={handleAddNominate}  {...result}/>)}
-    </div>
-    </div>
+    {results.Search?.length ? <p className={styles['page-fraction']}>{`${page} / ${Math.ceil(results.totalResults / RESULTS_PER_PAGE)}`}</p> : null}
+    <NominationDrawer setShowNominations={setShowNominations} showNominations={showNominations}>
+      <div className={`${styles['nominated-container']}`}>
+        {nominated.length 
+          ? 
+            nominated.map((result, i) => <OMDBCard nominate key={result.title + i} title={result.title} releaseYear={result.releaseYear} posterUrl={result.Poster === "N/A" ? '' : result.Poster} handleAddNominate={handleAddNominate}  {...result}/>)
+          : 
+            <div>NO NOMINATIONS YET</div>
+        }
+      </div>
+    </NominationDrawer>
+    </>
   );
 }
 

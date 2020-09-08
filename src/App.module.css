@@ -2,18 +2,15 @@ img {
     height: 100%;
 }
 
-.full-width {
-    width: 100%;
-}
 .search-container {
     height: 10vh;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .results-container { 
-    height: 45vh;
+    height: 65vh;
     overflow-x: scroll;
     overflow-y: hidden;
     display: flex;
@@ -25,8 +22,14 @@ img {
 }
 
 .nominated-container {
-    height: 40vh;
+    height: 85%;
     display: flex;
+    align-items: center;
+    overflow-y: scroll;
+    width: 99%;
+
+
+   
 }
 .nominated-container > * {
     margin: 0 1rem;
@@ -37,4 +40,28 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.shoppies-banner {
+    width: 100%;
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+.page-fraction {
+    width: 100%;
+    text-align: center;
+}
+
+.full-nominations-banner {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5rem;
+    text-align:center;
+    background: orange;
+    font-size: 1.2rem;
 }

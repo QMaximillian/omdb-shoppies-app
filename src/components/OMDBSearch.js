@@ -1,15 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styles from '../styles/OMDBSearch.module.css'
 
 export default function OMDBSearch({ searchTerm, setSearchTerm, labelName, labelText }){
-    return <>
+    return (
+        <div className={styles['omdb-search-container']}>
         <label htmlFor={labelName}>  
             {labelText} 
         </label>
-        <input value={searchTerm} onChange={setSearchTerm} id={labelName}>
+        <input className={styles['omdb-search-bar']} placeholder={"Search..."} value={searchTerm} onChange={setSearchTerm} id={labelName}>
         </input>
-        <button type="submit">Search</button>
-    </>
+        </div>
+    )
 }
 
 OMDBSearch.propTypes = {
